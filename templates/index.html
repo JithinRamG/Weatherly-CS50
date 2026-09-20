@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Weatherly</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+
+<body>
+
+    <h1>🌦️ Weatherly</h1>
+
+    <p>Your simple weather companion</p>
+
+
+    <!-- SEARCH -->
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="city"
+            placeholder="Enter a city"
+            required
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+        <p>{{ error }}</p>
+
+    {% endif %}
+
+
+    <!-- WEATHER -->
+
+    {% if weather %}
+
+        <hr>
+
+        <h2>{{ weather.city }}</h2>
+
+        <h1>{{ weather.temperature }}°C</h1>
+
+        <p>💧 Humidity: {{ weather.humidity }}%</p>
+
+        <p>💨 Wind: {{ weather.wind }} km/h</p>
+
+
+        <!-- FORECAST -->
+
+        <h2>📅 5-Day Forecast</h2>
+
+
+        {% for day in weather.forecast %}
+
+            <div>
+
+                <h3>{{ day.date }}</h3>
+
+                <p>
+                    🌡️ High: {{ day.max }}°C
+                </p>
+
+                <p>
+                    ❄️ Low: {{ day.min }}°C
+                </p>
+
+                <p>
+                    🌧️ Rain chance: {{ day.rain }}%
+                </p>
+
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+
+        <!-- SAVE -->
+
+        <form action="/save" method="POST">
+
+            <input
+                type="hidden"
+                name="city"
+                value="{{ weather.city }}"
+            >
+
+            <button type="submit">
+                ⭐ Save City
+            </button>
+
+        </form>
+
+    {% endif %}
+
+
+    <!-- SAVED CITIES -->
+
+    <h2>⭐ Saved Cities</h2>
+
+
+    {% if cities %}
+
+        {% for city in cities %}
+
+            <p>
+
+                {{ city.name }}
+
+                <a href="/?city={{ city.name }}">
+                    🌦️
+                </a>
+
+                <a href="/delete/{{ city.id }}">
+                    ❌
+                </a>
+
+            </p>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No saved cities yet.</p>
+
+    {% endif %}
+
+
+</body>
+
+</html>
